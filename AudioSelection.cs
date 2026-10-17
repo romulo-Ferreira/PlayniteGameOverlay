@@ -22,10 +22,21 @@ namespace PlayniteGameOverlay
 
         private void InitializeAudioSelection()
         {
-            audioButton = new Button { Content = "Audio output", Style = CloseGameButton.Style,
-                Width = 260, Height = 70, FontSize = 20, Foreground = Brushes.White,
-                Margin = new Thickness(0, 12, 0, 0) };
-            ((StackPanel)CloseGameButton.Parent).Children.Add(audioButton);
+            var content = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Left };
+            content.Children.Add(new System.Windows.Shapes.Path {
+                Data = Geometry.Parse("M3,9 L7,9 L12,4 L12,20 L7,15 L3,15 Z M16,8 C19,10 19,14 16,16 M19,4 C25,8 25,16 19,20"),
+                Stroke = Brushes.White, StrokeThickness = 1.8, StrokeLineJoin = PenLineJoin.Round,
+                Width = 26, Height = 26, Stretch = Stretch.Uniform,
+                VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0,0,15,0)
+            });
+            content.Children.Add(new TextBlock { Text = "Audio output", VerticalAlignment = VerticalAlignment.Center });
+            audioButton = new Button { Content = content, Style = CloseGameButton.Style,
+                Width = CloseGameButton.Width, Height = CloseGameButton.Height,
+                FontSize = CloseGameButton.FontSize, FontWeight = CloseGameButton.FontWeight,
+                Foreground = CloseGameButton.Foreground, BorderThickness = CloseGameButton.BorderThickness,
+                Padding = CloseGameButton.Padding, Margin = new Thickness(0,0,0,20) };
+            var menu = (StackPanel)CloseGameButton.Parent;
+            menu.Children.Insert(menu.Children.IndexOf(CloseGameButton), audioButton);
             audioButton.Click += async (s, e) => await OpenAudioSelection();
             IsVisibleChanged += (s, e) => { if (!IsVisible && closeAudioSelection != null) closeAudioSelection(); };
             PreviewKeyDown += (s, e) => {
